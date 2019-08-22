@@ -8,5 +8,4 @@ jobs:
     working_directory: /go/src/github.com/y0c/
     steps:
       - checkout
-      - run: go get -u 
       - run: go run main.go 
