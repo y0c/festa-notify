@@ -31,7 +31,7 @@ func New(to []string, subject string, body string) *Request {
 }
 
 func (r *Request) Send() (bool, error) {
-	mime := "MIME-version: 1.0;\nContent-Type: text/plain; charset=\"UTF-8\";\n\n"
+	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 	subject := "Subject: " + r.subject + "!\n"
 	msg := []byte(subject + mime + "\n" + r.body)
 	addr := "smtp.gmail.com:587"
