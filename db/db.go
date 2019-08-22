@@ -5,9 +5,16 @@ import (
 	"firebase.google.com/go/db"
 	"fmt"
 	"golang.org/x/net/context"
+	"google.golang.org/api/option"
+	"os"
 )
 
 var client *db.Client
+
+func getOption() option.ClientOption {
+	rawString := os.Getenv("SERVICE_ACCOUNT_KEY")
+	return option.WithCredentialsJSON([]byte(rawString))
+}
 
 func GetClient() (*db.Client, error) {
 	if client == nil {
@@ -16,7 +23,7 @@ func GetClient() (*db.Client, error) {
 			DatabaseURL: "https://festa-notify.firebaseio.com/",
 		}
 
-		app, err := firebase.NewApp(ctx, config)
+		app, err := firebase.NewApp(ctx, config, getOption())
 		if err != nil {
 			return nil, fmt.Errorf("error initializing app: %v", err)
 		}
