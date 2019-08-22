@@ -6,6 +6,7 @@ import (
 	"github.com/y0c/festa-notify/festa"
 	"github.com/y0c/festa-notify/mail"
 	"github.com/y0c/festa-notify/subscriber"
+	"github.com/y0c/festa-notify/template"
 	"strings"
 	"time"
 )
@@ -53,7 +54,9 @@ func main() {
 
 	for _, subscriber := range subscribers {
 		personalEvents := funk.Filter(availableEvents, matchKeywordEvent(subscriber.Keywords)).([]festa.Event)
-		m := mail.New([]string{subscriber.Mail}, "Festa 알림", personalEvents[0].Name)
+		eventTemplate, err := template.GenerateEventTemplate(personalEvents)
+		panicError(err)
+		m := mail.New([]string{subscriber.Mail}, "Festa 알림", eventTemplate)
 
 		m.Send()
 	}
