@@ -1,0 +1,19 @@
+service: festa-notify
+
+provider:
+  name: aws
+  runtime: go1.x
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+  sendMail:
+    handler: bin/sendMail
+    events:
+      - http:
+          path: sendMail 
+          method: post
