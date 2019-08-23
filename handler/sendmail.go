@@ -2,13 +2,13 @@ package handler
 
 import (
 	"fmt"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/joho/godotenv"
+	"github.com/gin-gonic/gin"
 	"github.com/thoas/go-funk"
 	"github.com/y0c/festa-notify/festa"
 	"github.com/y0c/festa-notify/mail"
 	"github.com/y0c/festa-notify/subscriber"
 	"github.com/y0c/festa-notify/template"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -39,8 +39,7 @@ func panicError(err error) {
 	}
 }
 
-func SendMailHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	_ = godotenv.Load()
+func SendMailHandler(c *gin.Context) {
 	mail.Auth()
 
 	subscribers := getSubscribers()
@@ -65,5 +64,5 @@ func SendMailHandler(request events.APIGatewayProxyRequest) (events.APIGatewayPr
 		_, err = m.Send()
 		fmt.Println(err)
 	}
-	return events.APIGatewayProxyResponse{Body: "OK", StatusCode: 200}, nil
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "OK"})
 }
