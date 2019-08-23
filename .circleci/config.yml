@@ -1,12 +1,10 @@
 version: 2
 jobs:
-  build:
+  deploy:
     docker:
-      - image: circleci/golang:1.11
-        environment:
-          GO111MODULE: "ON"
-    working_directory: /go/src/github.com/y0c/
+      - image: holnet1026/circleci-serverless-go:latest
+    working_directory: /go/src/github.com/y0c
     steps:
       - checkout
-      - run: go build
-      - run: go run main.go 
+      - run: serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+      - run: make deploy
