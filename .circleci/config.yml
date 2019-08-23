@@ -7,4 +7,5 @@ jobs:
     steps:
       - checkout
       - run: serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+      - run: go get -u github.com/aws/aws-lambda-go/lambda
       - run: make deploy
