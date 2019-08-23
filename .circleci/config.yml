@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  deploy:
+  build:
     docker:
       - image: holnet1026/circleci-serverless-go:latest
     working_directory: /go/src/github.com/y0c
