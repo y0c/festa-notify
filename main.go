@@ -10,17 +10,31 @@ import (
 	"os"
 )
 
+func handleErrors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Println(err)
+				c.JSON(500, gin.H{
+					"message": "Internal Server Error",
+				})
+			}
+		}()
+		c.Next()
+	}
+}
 func main() {
 	godotenv.Load()
 	addr := ":4000"
 	stage := os.Getenv("GIN_MODE")
 
-	g := gin.New()
-	g.POST("/sendMail", handler.SendMailHandler)
+	r := gin.New()
+	r.Use(handleErrors())
+	r.POST("/sendMail", handler.SendMailHandler)
 
 	if stage == "release" {
-		log.Fatal(gateway.ListenAndServe(addr, g))
+		log.Fatal(gateway.ListenAndServe(addr, r))
 	} else {
-		log.Fatal(http.ListenAndServe(addr, g))
+		log.Fatal(http.ListenAndServe(addr, r))
 	}
 }

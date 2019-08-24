@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/thoas/go-funk"
 	"github.com/y0c/festa-notify/festa"
@@ -29,7 +28,7 @@ func matchKeywordEvent(keywords []string) func(event festa.Event) bool {
 	}
 }
 
-func panicError(err error) {
+func handleHttpError(err error) {
 	if err != nil {
 		panic(err)
 	}
@@ -37,10 +36,10 @@ func panicError(err error) {
 
 func SendMailHandler(c *gin.Context) {
 	subscriberService, err := subscriber.New()
-	panicError(err)
+	handleHttpError(err)
 
 	subscribers, err := subscriberService.GetSubscribers()
-	panicError(err)
+	handleHttpError(err)
 	festaAPI := festa.New()
 	festaEvents := festaAPI.GetEvents()
 	now := time.Now()
@@ -73,7 +72,7 @@ func SendMailHandler(c *gin.Context) {
 		subscriberService.UpdateLastCreatedAt(subscriber.Ref, createdAts[0])
 
 		eventTemplate, err := template.GenerateEventTemplate(personalEvents)
-		panicError(err)
+		handleHttpError(err)
 
 		err = mail.Send(mail.EmailData{
 			To:      subscriber.Mail,
@@ -81,7 +80,7 @@ func SendMailHandler(c *gin.Context) {
 			Subject: "Festa 알림",
 		})
 
-		fmt.Println(err)
+		handleHttpError(err)
 	}
 	c.JSON(http.StatusOK, gin.H{"success": true, "message": "OK"})
 }
