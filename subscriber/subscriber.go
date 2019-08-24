@@ -62,7 +62,6 @@ func (s *Service) GetSubscribers() ([]Subscriber, error) {
 		}
 
 		subscriberMap := doc.Data()
-		fmt.Println(subscriberMap)
 
 		subscribers = append(subscribers,
 			Subscriber{

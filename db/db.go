@@ -13,7 +13,6 @@ var client *firestore.Client
 
 func getOption() option.ClientOption {
 	rawString := os.Getenv("SERVICE_ACCOUNT_KEY")
-	fmt.Println(rawString)
 	return option.WithCredentialsJSON([]byte(rawString))
 }
 
