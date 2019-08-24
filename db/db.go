@@ -1,39 +1,40 @@
 package db
 
 import (
+	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
-	"firebase.google.com/go/db"
 	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"os"
 )
 
-var client *db.Client
+var client *firestore.Client
 
 func getOption() option.ClientOption {
 	rawString := os.Getenv("SERVICE_ACCOUNT_KEY")
+	fmt.Println(rawString)
 	return option.WithCredentialsJSON([]byte(rawString))
 }
 
-func GetClient() (*db.Client, error) {
+func GetClient() (*firestore.Client, error) {
 	if client == nil {
+
 		ctx := context.Background()
-		config := &firebase.Config{
-			DatabaseURL: "https://festa-notify.firebaseio.com/",
-		}
+		conf := &firebase.Config{ProjectID: "festa-notify"}
 
-		app, err := firebase.NewApp(ctx, config, getOption())
-		if err != nil {
-			return nil, fmt.Errorf("error initializing app: %v", err)
-		}
-
-		dbClient, err := app.Database(ctx)
+		app, err := firebase.NewApp(ctx, conf, getOption())
 
 		if err != nil {
-			return nil, fmt.Errorf("error initializing database: %v", err)
+			return nil, fmt.Errorf("error initializing firebase app: %v", err)
 		}
-		client = dbClient
+
+		store, err := app.Firestore(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("error initializing firestore: %v", err)
+		}
+
+		client = store
 	}
 	return client, nil
 }
