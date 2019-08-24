@@ -15,11 +15,12 @@ type EmailData struct {
 }
 
 const Sender = "noreply@festa-notify.cf"
+const Region = "us-east-1"
 const CharSet = "UTF-8"
 
 func Send(data EmailData) error {
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1")},
+		Region: aws.String(Region)},
 	)
 
 	if err != nil {
