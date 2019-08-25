@@ -1,13 +1,11 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/thoas/go-funk"
 	"github.com/y0c/festa-notify/festa"
 	"github.com/y0c/festa-notify/mail"
 	"github.com/y0c/festa-notify/subscriber"
 	"github.com/y0c/festa-notify/template"
-	"net/http"
 	"sort"
 	"strings"
 	"time"
@@ -34,7 +32,7 @@ func handleHttpError(err error) {
 	}
 }
 
-func SendMailHandler(c *gin.Context) {
+func SendMailHandler() (string, error) {
 	subscriberService, err := subscriber.New()
 	handleHttpError(err)
 
@@ -82,5 +80,5 @@ func SendMailHandler(c *gin.Context) {
 
 		handleHttpError(err)
 	}
-	c.JSON(http.StatusOK, gin.H{"success": true, "message": "OK"})
+	return "Success", nil
 }
