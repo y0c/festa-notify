@@ -21,6 +21,7 @@ const (
 	charset = "utf-8"
 )
 
+// Send send mail via aws ses
 func Send(data Form) error {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region)},
