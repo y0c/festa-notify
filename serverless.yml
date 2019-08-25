@@ -15,5 +15,5 @@ functions:
     handler: bin/sendMail
     events:
       - http:
-          path: sendMail 
+          path: /sendMail 
           method: post
