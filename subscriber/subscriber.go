@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// Subscriber firestore collection value object
 type Subscriber struct {
 	Ref           *firestore.DocumentRef
 	Mail          string
@@ -17,13 +18,15 @@ type Subscriber struct {
 	LastCreatedAt time.Time
 }
 
+// Service charge firestore operation
 type Service struct {
 	client *firestore.Client
 	ctx    context.Context
 }
 
-const COLLECTION_ID = "subscribers"
+const collectionID = "subscribers"
 
+// New return a firestore service struct
 func New() (*Service, error) {
 	client, err := db.GetClient()
 	ctx := context.Background()
@@ -46,8 +49,9 @@ func castToStringArray(data interface{}) (result []string) {
 	return
 }
 
+// GetSubscribers return firestore collection convert to Subscriber struct array
 func (s *Service) GetSubscribers() ([]Subscriber, error) {
-	iter := s.client.Collection(COLLECTION_ID).Documents(s.ctx)
+	iter := s.client.Collection(collectionID).Documents(s.ctx)
 	var subscribers []Subscriber
 
 	for {
@@ -75,6 +79,7 @@ func (s *Service) GetSubscribers() ([]Subscriber, error) {
 	return subscribers, nil
 }
 
+// UpdateLastCreatedAt update subscriber laster createdAt
 func (s *Service) UpdateLastCreatedAt(ref *firestore.DocumentRef, createdAt time.Time) error {
 	_, err := ref.Set(s.ctx, map[string]interface{}{
 		"lastCreatedAt": createdAt,

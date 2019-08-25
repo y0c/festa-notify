@@ -26,18 +26,19 @@ func matchKeywordEvent(keywords []string) func(event festa.Event) bool {
 	}
 }
 
-func handleHttpError(err error) {
+func handleHTTPError(err error) {
 	if err != nil {
 		panic(err)
 	}
 }
 
+// SendMailHandler lambda function handler for send notification to subscribers
 func SendMailHandler() (string, error) {
 	subscriberService, err := subscriber.New()
-	handleHttpError(err)
+	handleHTTPError(err)
 
 	subscribers, err := subscriberService.GetSubscribers()
-	handleHttpError(err)
+	handleHTTPError(err)
 	festaAPI := festa.New()
 	festaEvents := festaAPI.GetEvents()
 	now := time.Now()
@@ -70,7 +71,7 @@ func SendMailHandler() (string, error) {
 		subscriberService.UpdateLastCreatedAt(subscriber.Ref, createdAts[0])
 
 		eventTemplate, err := template.GenerateEventTemplate(personalEvents)
-		handleHttpError(err)
+		handleHTTPError(err)
 
 		err = mail.Send(mail.EmailData{
 			To:      subscriber.Mail,
@@ -78,7 +79,7 @@ func SendMailHandler() (string, error) {
 			Subject: "Festa 알림",
 		})
 
-		handleHttpError(err)
+		handleHTTPError(err)
 	}
 	return "Success", nil
 }

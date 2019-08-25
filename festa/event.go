@@ -2,7 +2,7 @@ package festa
 
 import "time"
 
-// Event ...
+// Event a Value struct for Festa io response
 type Event struct {
 	EventID             int         `json:"eventId"`
 	HostUserID          interface{} `json:"hostUserId"`

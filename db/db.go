@@ -1,3 +1,4 @@
+// Package db provides firestore client
 package db
 
 import (
@@ -16,6 +17,7 @@ func getOption() option.ClientOption {
 	return option.WithCredentialsJSON([]byte(rawString))
 }
 
+// GetClient return signletone firestore instance
 func GetClient() (*firestore.Client, error) {
 	if client == nil {
 

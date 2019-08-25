@@ -7,20 +7,23 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
-type EmailData struct {
+// Form is it's a format for sending mail.
+type Form struct {
 	From    string
 	To      string
 	Subject string
 	Body    string
 }
 
-const Sender = "noreply@festa-notify.cf"
-const Region = "us-east-1"
-const CharSet = "UTF-8"
+const (
+	sender  = "noreply@festa-notify.cf"
+	region  = "us-east-1"
+	charset = "utf-8"
+)
 
-func Send(data EmailData) error {
+func Send(data Form) error {
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(Region)},
+		Region: aws.String(region)},
 	)
 
 	if err != nil {
@@ -39,16 +42,16 @@ func Send(data EmailData) error {
 		Message: &ses.Message{
 			Body: &ses.Body{
 				Html: &ses.Content{
-					Charset: aws.String(CharSet),
+					Charset: aws.String(charset),
 					Data:    aws.String(data.Body),
 				},
 			},
 			Subject: &ses.Content{
-				Charset: aws.String(CharSet),
+				Charset: aws.String(charset),
 				Data:    aws.String(data.Subject),
 			},
 		},
-		Source: aws.String(Sender),
+		Source: aws.String(sender),
 	}
 
 	result, err := svc.SendEmail(input)

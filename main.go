@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	godotenv.Load()
+	_ = godotenv.Load()
 	lambda.Start(handler.SendMailHandler)
 }

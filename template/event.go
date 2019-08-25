@@ -7,7 +7,8 @@ import (
 	"html/template"
 )
 
-type TemplateVariables struct {
+// Variables is HTML template variable
+type Variables struct {
 	Events []festa.Event
 }
 
@@ -44,6 +45,7 @@ const mailTemplate = `
 	</html>
 `
 
+// GenerateEventTemplate convert events to mail html template
 func GenerateEventTemplate(events []festa.Event) (string, error) {
 
 	var buf bytes.Buffer
@@ -55,7 +57,7 @@ func GenerateEventTemplate(events []festa.Event) (string, error) {
 		return "", fmt.Errorf("template error %v", err)
 	}
 
-	err = tmpl.Execute(&buf, TemplateVariables{
+	err = tmpl.Execute(&buf, Variables{
 		events,
 	})
 
