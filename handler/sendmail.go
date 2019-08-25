@@ -73,7 +73,7 @@ func SendMailHandler() (string, error) {
 		eventTemplate, err := template.GenerateEventTemplate(personalEvents)
 		handleHTTPError(err)
 
-		err = mail.Send(mail.EmailData{
+		err = mail.Send(mail.Form{
 			To:      subscriber.Mail,
 			Body:    eventTemplate,
 			Subject: "Festa 알림",
